@@ -30,62 +30,51 @@ const stopServer = () => {
 */
 
 //OBTENER CLIENTES DE UN TRABAJADOR ESPECIFICO
-app.get('/api/v1/clients/:cod_user', async(req, res) => {
-    const { cod_user } = req.params;
+app.get('/api/v1/articulos', async (req, res) => {
     try {
-        const sql = "SELECT * FROM clientes WHERE cod_user =? ORDER BY cod_cliente";
-        const result = await query(sql, [cod_user]);
+        const sql = "SELECT * FROM Articulos ORDER BY id";
+        const result = await query(sql);
         let message = '';
-        if(result === undefined || result.length === 0) {
-            message = 'Actores table is empty';
-        }else{
-            message = 'Successfully retrieved all actors';
+        if (result === undefined || result.length === 0) {
+            message = 'La tabla Articulos está vacía';
+        } else {
+            message = 'Se obtuvieron exitosamente todos los artículos';
         }
 
-        res.send({ 
+        res.send({
             error: false,
             data: result,
             message: message
-        })
+        });
     } catch (error) {
         console.log(error);
-        res.resStatus(500);
+        res.sendStatus(500);
     }
-})
+});
 
-//BUSQUEDA POR nombre o codigo
-app.get('/api/v1/clients/:cod_user/:dato', async(req, res) => {
-    const { cod_user, dato } = req.params;
-    console.log("DATO :",dato);
-    var sql="";
-    var result;
+app.get('/api/v1/articulos/:id', async (req, res) => {
+    const { id } = req.params;
     try {
-        if(dato>0){
-            sql = "SELECT * FROM clientes WHERE cod_user =? AND cod_cliente = ? ORDER BY cod_cliente";
-            console.log("SQL1", sql);
-            result = await query(sql, [cod_user, dato]);
-        }else{
-            sql = "SELECT * FROM clientes WHERE cod_user =? AND nombre_c LIKE ? ORDER BY cod_cliente";
-            console.log("SQL2", sql);
-            result = await query(sql, [cod_user, "%"+dato+"%"]);
-        }
+        const sql = "SELECT * FROM Articulos WHERE id = ? ORDER BY id";
+        const result = await query(sql, [id]);
         let message = '';
-        if(result === undefined || result.length === 0) {
-            message = 'No se encuentra el cliente';
-        }else{
-            message = 'MOSTRANDO CLIENTES...';
+        if (result === undefined || result.length === 0) {
+            message = 'La tabla Articulos está vacía';
+        } else {
+            message = 'Se obtuvieron exitosamente todos los artículos';
         }
 
-        res.send({ 
+        res.send({
             error: false,
             data: result,
             message: message
-        })
+        });
     } catch (error) {
         console.log(error);
-        res.resStatus(500);
+        res.sendStatus(500);
     }
-})
+});
+
 
 
 //HACER LOGIN EN BD
