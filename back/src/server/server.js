@@ -75,31 +75,55 @@ app.get('/api/v1/articulos/:id', async (req, res) => {
     }
 });
 
+app.delete('/api/v1/articulos/:id', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Realizar la lógica para eliminar el artículo de la base de datos
+      // por ejemplo, ejecutar una consulta SQL de eliminación
+  
+      // Ejemplo utilizando MySQL y la librería mysql2
+      const sql = 'DELETE FROM Articulos WHERE id = ?';
+      await query(sql, [id]);
+  
+      res.send({
+        error: false,
+        message: 'Artículo eliminado correctamente'
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        error: true,
+        message: 'Error al eliminar el artículo'
+      });
+    }
+  });
 
 
 //HACER LOGIN EN BD
-app.get('/api/v1/trabajador/:name/:pass', async(req, res) => {
-    const { name, pass } = req.params;
+app.post('/api/v1/articulos', async (req, res) => {
+    const { nombre, descripcion, precio, stock } = req.body;
+  
     try {
-        const sql = "SELECT `cod_user` FROM `trabajadores` WHERE name=? AND pass=MD5(?)";
-        const result = await query(sql, [name, pass]);
-        let message = '';
-        if(result === undefined || result.length === 0) {
-            message = 'Actores table is empty';
-        }else{
-            message = 'Successfully retrieved all actors';
-        }
-
-        res.send({ 
-            error: false,
-            data: result,
-            message: message
-        })
+      // Realizar la lógica para añadir el artículo a la base de datos
+      // por ejemplo, ejecutar una consulta SQL de inserción
+  
+      // Ejemplo utilizando MySQL y la librería mysql2
+      const sql = 'INSERT INTO Articulos (nombre, descripcion, precio, stock) VALUES (?, ?, ?, ?)';
+      await query(sql, [nombre, descripcion, precio, stock]);
+  
+      res.send({
+        error: false,
+        message: 'Artículo añadido correctamente'
+      });
     } catch (error) {
-        console.log(error);
-        res.resStatus(500);
+      console.error(error);
+      res.status(500).send({
+        error: true,
+        message: 'Error al añadir el artículo'
+      });
     }
-})
+  });
 
 
 //OBTENER TRABAJADORES
