@@ -12,6 +12,7 @@ code {
     monospace;
 }
 
+
 .app {
   text-align: center;
   max-width: 600px;
@@ -25,26 +26,39 @@ code {
   margin-top: 0;
 }
 
-.app-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
 }
 
-.app-item {
-  background-color: #ffffff;
+.app-table-header {
+  background-color: #f5f5f5;
+}
+
+.app-table-cell {
   padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #dddddd;
 }
 
-.app-item-title {
-  margin-top: 0;
+.app-table-cell:last-child {
+  border-right: none;
 }
 
-.app-item-delete-btn {
+.app-table-cell-title {
+  font-weight: bold;
+}
+
+.app-table-cell-delete-btn {
   background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.app-table-cell-edit-btn {
+  background-color: green;
   color: #ffffff;
   border: none;
   padding: 5px 10px;
@@ -53,6 +67,9 @@ code {
 }
 
 .app-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: 20px;
 }
 
@@ -73,6 +90,46 @@ code {
 }
 
 .app-form-submit-btn {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.app-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.app-form-heading {
+  margin-top: 0;
+}
+
+.app-form-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.app-form-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #cccccc;
+}
+
+.app-form-submit-btn {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.app-toggle-form-btn {
   background-color: #007bff;
   color: #ffffff;
   border: none;

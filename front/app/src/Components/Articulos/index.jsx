@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import bd from '../../services/services.js'
+import bd from '../../services/services.js';
+import { ArticleForm } from './ArticleForm.jsx';
 
 export const Articulos = () => {
     const URL = 'http://localhost:8002/api/v1';
     const [articulos, setArticulos] = useState([]);
-    const [nuevoArticulo, setNuevoArticulo] = useState({
-      nombre: '',
-      descripcion: '',
-      precio: '',
-      stock: ''
-    });
-  
+    const [mostrarFormulario, setMostrarFormulario] = useState(false);
+    const [refresh, onRefresh] = useState();
     useEffect(() => {
       obtenerArticulos();
     }, []);
@@ -27,15 +23,11 @@ export const Articulos = () => {
         });
     };
   
-    const handleInputChange = (event) => {
-      const { name, value } = event.target;
-      setNuevoArticulo({ ...nuevoArticulo, [name]: value });
-    };
-  
-    const handleAgregarArticulo = () => {
-        console.log(nuevoArticulo)
-        bd.aInsertArticle(nuevoArticulo).then((res) => {
+    const handleAgregarArticulo = (articulo) => {
+        console.log(articulo)
+        bd.aInsertArticle(articulo).then((res) => {
             console.log("SE HA INSERTADO CORRECTAMENTE", res)
+            setArticulos([...articulos, articulo])
         })
     };
   
@@ -55,68 +47,53 @@ export const Articulos = () => {
             console.error(error);
           });
     };
+
+    const toggleMostrarFormulario = () => {
+        setMostrarFormulario(!mostrarFormulario);
+      };
+
+    const comprobeViewForm = () => { 
+      if (mostrarFormulario) {
+        return(<ArticleForm onAddArticle={handleAgregarArticulo} title="articulo" onViewForm={setMostrarFormulario}/>)
+      }
+    };
   
     return (
-      <div>
+      <>
         <h1 className="app-heading">Listado de Artículos</h1>
-      <ul className="app-list">
-          {articulos.map((articulo) => (
-            <li key={articulo.id}>
-              <h2 className="app-item-title">{articulo.nombre}</h2>
-                <p className="app-item-description">{articulo.descripcion}</p>
-                <p className="app-item-price">Precio: {articulo.precio}</p>
-                <p className="app-item-stock">Stock: {articulo.stock}</p>
-                <button className="app-item-delete-btn" onClick={() => handleEliminarArticulo(articulo.id)}>Eliminar</button>
-                <button onClick={() => handleEditarArticulo(articulo)}>Editar</button>
-            </li>
-          ))}
-        </ul>
-  
-        <h2 className="app-form-heading">Añadir Artículo</h2>
-      <form className="app-form">
-        <label className="app-form-label">
-          Nombre:
-          <input
-            type="text"
-            name="nombre"
-            value={nuevoArticulo.nombre}
-            onChange={handleInputChange}
-            className="app-form-input"
-          />
-        </label>
-        <label className="app-form-label">
-          Descripción:
-          <textarea
-            name="descripcion"
-            value={nuevoArticulo.descripcion}
-            onChange={handleInputChange}
-            className="app-form-input"
-          />
-        </label>
-        <label className="app-form-label">
-          Precio:
-          <input
-            type="text"
-            name="precio"
-            value={nuevoArticulo.precio}
-            onChange={handleInputChange}
-            className="app-form-input"
-          />
-        </label>
-        <label className="app-form-label">
-          Stock:
-          <input
-            type="text"
-            name="stock"
-            value={nuevoArticulo.stock}
-            onChange={handleInputChange}
-            className="app-form-input"
-          />
-        </label>
-        <button type="button" onClick={handleAgregarArticulo} className="app-form-submit-btn">
-          Agregar
+        <button className="app-toggle-form-btn" onClick={toggleMostrarFormulario}>
+        Añadir Artículo
         </button>
-        </form>
-      </div>
+        {comprobeViewForm()}
+      <table className="app-table">
+        <thead>
+          <tr className="app-table-header">
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {articulos.map((articulo) => (
+            <tr key={articulo.id} className="app-table-row">
+              <td className="app-table-cell">{articulo.nombre}</td>
+              <td className="app-table-cell">{articulo.descripcion}</td>
+              <td className="app-table-cell">{articulo.precio}</td>
+              <td className="app-table-cell">{articulo.stock}</td>
+              <td className="app-table-cell">
+                <button className="app-table-cell-delete-btn" onClick={() => handleEliminarArticulo(articulo.id)}>
+                  Eliminar
+                </button>
+                <button className="app-table-cell-edit-btn" onClick={() => handleEditarArticulo(articulo)}>
+                  Editar
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </>
     );
 }
